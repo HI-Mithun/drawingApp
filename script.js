@@ -14,30 +14,27 @@ function resizeCanvas() {
 resizeCanvas();
 // window.addEventListener('resize', resizeCanvas);
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight -document.querySelector('.toolbar').offsetHeight;
-
 let drawing = false;
 
-canvas.addEventListener('mousedown', ()=> drawing = true);
+canvas.addEventListener('mousedown', (e)=> {
+    drawing = true;
+    ctx.beginPath();
+    ctx.moveTo(e.clientX, e.clientY-document.querySelector('.toolbar').offsetHeight);
+});
 canvas.addEventListener('mouseup', ()=> drawing = false);
 canvas.addEventListener('mouseout', ()=> drawing = false);
 
-canvas.addEventListener('mousemove', draw);
-
-function draw(e) {
-    if (!drawing) return;
+canvas.addEventListener('mousemove', (e) => {
+    if(!drawing) return;
 
     ctx.lineWidth = brushSize.value;
-    ctx.lineCap = 'rount';
-    ctx.strokeStyle = colorPicker.value;
+    ctx.lineCap = 'round';
+    ctx.strokeStyle = colorPicker.value
 
     ctx.lineTo(e.clientX, e.clientY-document.querySelector('.toolbar').offsetHeight);
     ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(e.clientX, e.clientY-document.querySelector('.toolbar').offsetHeight);
+});
 
-}
 
 clearBtn.addEventListener('click', () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
